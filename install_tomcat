@@ -2,7 +2,7 @@
 #download tomcat from china
 
 Version=$(curl -Lks https://mirrors.shu.edu.cn/apache/tomcat/tomcat-8/ | grep  "<a href=" | awk -F'["/]?' '/v[0-9]/{print $11}')
-Workdir="/opt"
+Workdir="/usr/local/src"
 #if you wish to change the installation directory, just replcae Workdir with the doc which one you wish
 wget https://mirrors.shu.edu.cn/apache/tomcat/tomcat-8/$Version/bin/apache-tomcat-`echo ${Version} | tr -d "v"`.tar.gz
 if [ $PWD == $Workdir ];then
