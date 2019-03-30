@@ -1,0 +1,12 @@
+#!/bin/bash
+#coz if you download jdk from oracle directly ,you will get an error tarbar
+#I learn this method from https://kdecherf.com/blog/2012/04/12/oracle-i-download-your-jdk-by-eating-magic-cookies/
+#He is the first one to resolve this problem----maybe  i think so ga ga ga ga!!!!
+curl -L -b "oraclelicense=a" https://download.oracle.com/otn-pub/java/jdk/8u201-b09/42970487e3af4f5aa5bca3f542482c60/jdk-8u201-linux-x64.tar.gz -o jdk-8u201-linxx-x64.tar.gz
+Workdir="/usr/local/src"
+#if you wish to change the installation directory,just replace Workdir which one you wish!
+if [ $PWD == $Workdir ];then
+	tar -zxvf jdk-8u201-linxx-x64.tar.gz
+else
+	tar -zxvf jdk-8u201-linxx-x64.tar.gz -C $Workdir/
+fi
