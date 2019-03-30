@@ -8,5 +8,5 @@ wget https://mirrors.shu.edu.cn/apache/tomcat/tomcat-8/$Version/bin/apache-tomca
 if [ $PWD == $Workdir ];then
 	tar -zxvf apache-tomcat-`echo ${Version} | tr -d "v"`.tar.gz
 else
-	tar -zxvf apache-tomcat-`echo ${Version} | tr -d "v"`.tar.gz -C /opt;
+	tar -zxvf apache-tomcat-`echo ${Version} | tr -d "v"`.tar.gz -C $Workdir;
 fi
