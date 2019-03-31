@@ -27,6 +27,7 @@ cat >/etc/init.d/tomcat <<EOF
 if [ -f /etc/init.d/functions ];then
 	. /etc/init.d/functions
 elif [ -f /etc/rc.d/init.d/functions ];then
+        . /etc/rc.d/init.d/functions
 else
 	echo -e "\atomcat: unable to locate functions lib.Connot continue."
 	exit -1
