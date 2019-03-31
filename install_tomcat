@@ -4,12 +4,17 @@
 Version=$(curl -Lks https://mirrors.shu.edu.cn/apache/tomcat/tomcat-8/ | grep  "<a href=" | awk -F'["/]?' '/v[0-9]/{print $11}')
 Workdir="/usr/local/src"
 #if you wish to change the installation directory, just replcae Workdir with the doc which one you wish
-wget https://mirrors.shu.edu.cn/apache/tomcat/tomcat-8/$Version/bin/apache-tomcat-`echo ${Version} | tr -d "v"`.tar.gz
-if [ $PWD == $Workdir ];then
+if [ ! -e apache-tomcat-`echo ${Version} | tr -d "v"`.tar.gz ];then
+    wget https://mirrors.shu.edu.cn/apache/tomcat/tomcat-8/$Version/bin/apache-tomcat-`echo ${Version} | tr -d "v"`.tar.gz
+    if [ "$PWD" = "$Workdir" ];then
 	tar -zxvf apache-tomcat-`echo ${Version} | tr -d "v"`.tar.gz
+    else
+	tar -zxvf apache-tomcat-`echo ${Version} | tr -d "v"`.tar.gz -C $Workdir
+    fi
 else
-	tar -zxvf apache-tomcat-`echo ${Version} | tr -d "v"`.tar.gz -C $Workdir;
+        tar -zxvf apache-tomcat-`echo ${Version} | tr -d "v"`.tar.gz -C $Workdir
 fi
+
 #set enviromental variables with jdk for tomcat
 sed -ir "110 a"JAVA_HOME=$Workdir/jdk1.8.0_201"" $Workdir/apache-tomcat-`echo ${Version} | tr -d "v"`/bin/catalina.sh
 sed -ir "110 a"CATALINA_HOME=$Workdir/apache-tomcat-`echo ${Version} | tr -d "v"`"" $Workdir/apache-tomcat-`echo ${Version} | tr -d "v"`/bin/catalina.sh
