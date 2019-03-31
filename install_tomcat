@@ -77,4 +77,4 @@ EOF
 chown -R $TOMCAT_USER:$TOMCAT_USER $Workdir/apache-tomcat-`echo ${Version} | tr -d "v"`
 chmod +x /etc/init.d/tomcat
 chkconfig --add tomcat
-service tomcat start
+service tomcat restart
