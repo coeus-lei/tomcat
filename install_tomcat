@@ -3,6 +3,10 @@
 
 Version=$(curl -Lks https://mirrors.shu.edu.cn/apache/tomcat/tomcat-8/ | grep  "<a href=" | awk -F'["/]?' '/v[0-9]/{print $11}')
 Workdir="/usr/local/src"
+TOMCAT_USER=tomcat
+if ! id $TOMCAT_USER >/dev/null 2>&1;then
+    useradd -s /bin/bash $TOMCAT_USER
+fi
 #if you wish to change the installation directory, just replcae Workdir with the doc which one you wish
 if [ ! -f apache-tomcat-`echo ${Version} | tr -d "v"`.tar.gz ];then
     wget https://mirrors.shu.edu.cn/apache/tomcat/tomcat-8/$Version/bin/apache-tomcat-`echo ${Version} | tr -d "v"`.tar.gz
@@ -39,23 +43,23 @@ else
 fi
 
 prog=tomcat
-
+TOMCAT_USER=tomcat
 CATALANA_HOME=$Workdir/apache-tomcat-`echo ${Version} | tr -d "v"`
 case "\$1" in
 start)
     echo "starting Tomcat..."
-    \$CATALANA_HOME/bin/catalina.sh start
+    su \$TOMCAT_USER -c \$CATALANA_HOME/bin/startup.sh
     ;;
 stop)
     echo "stopping tomcat..."
-    \$CATALANA_HOME/bin/catalina.sh stop
+    \$CATALANA_HOME/bin/shutdown.sh
     ;;
 restart)
     echo "stopping tomcat..."
-    \$CATALANA_HOME/bin/catalina.sh stop
+    \$CATALANA_HOME/bin/shutdown.sh
     sleep 2
     echo "starting tomcat..."
-    \$CATALANA_HOME/bin/catalina.sh start
+    su \$TOMCAT_USER -c \$CATALANA_HOME/bin/startup.sh
     ;;
 status)
     if [ -f $LOCKFILE ];then
