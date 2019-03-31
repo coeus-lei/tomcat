@@ -18,3 +18,53 @@ export JAVA_HOME=$Workdir/jdk1.8.0_201
 export JRE_HOME=$Workdir/jdk1.8.0_201/jre
 export PATH=$PATH:$JAVA_HOME/bin:$JRE_HOME/bin
 echo -e "export JAVA_HOME=$Workdir/jdk1.8.0_201\nexport JRE_HOME=$Workdir/jdk1.8.0_201/jre\nexport PATH=$PATH:$JAVA_HOME/bin:$JRE_HOME/bin" >>/etc/profile
+
+cat >/etc/init.d/tomcat <<EOF
+#!/bin/bash
+#for start|stop|restart tomcat with user tomcat
+#chkconfig:2345 10 90
+#description:myservice
+if [ -f /etc/init.d/functions ];then
+	. /etc/init.d/functions
+elif [ -f /etc/rc.d/init.d/functions ];then
+else
+	echo -e "\atomcat: unable to locate functions lib.Connot continue."
+	exit -1
+fi
+
+prog=tomcat
+
+CATALANA_HOME=$Workdir/apache-tomcat-`echo ${Version} | tr -d "v"`
+case "\$1" in
+start)
+    echo "starting Tomcat..."
+    \$CATALANA_HOME/bin/catalina.sh start
+    ;;
+stop)
+    echo "stopping tomcat..."
+    \$CATALANA_HOME/bin/catalina.sh stop
+    ;;
+restart)
+    echo "stopping tomcat..."
+    \$CATALANA_HOME/bin/catalina.sh stop
+    sleep 2
+    echo "starting tomcat..."
+    \$CATALANA_HOME/bin/catalina.sh start
+    ;;
+status)
+    if [ -f $LOCKFILE ];then
+    	echo $0 started.
+    else
+    	echo $0 stopped.
+    fi
+    ;;
+*)
+    echo "Usage:\$prog{start|stop|restart}"
+    ;;
+esac
+exit 0
+EOF
+
+chmod +x /etc/init.d/tomcat
+chkconfig --add tomcat
+service tomcat start
